@@ -1635,7 +1635,7 @@ class App(tk.Tk):
     # ---------- شريط التنقل العلوي (Navbar) ----------
     def _build_header(self):
         """شريط علوي ثابت مع شعار، اسم المؤسسة، زر القائمة، ومؤشر المستخدم."""
-        header = tk.Frame(self, bg=NAVY, height=64)
+        header = tk.Frame(self, bg=NAVY, height=80)
         header.pack(fill="x")
         header.pack_propagate(False)
         inner = tk.Frame(header, bg=NAVY)
@@ -4385,16 +4385,18 @@ class LoginWindow(tk.Tk):
         except Exception:
             pass
 
-        tk.Frame(self, bg=NAVY, height=100).pack(fill="x")
-        tk.Label(self, text="🎓", bg=NAVY, fg=GOLD,
+        hdr = tk.Frame(self, bg=CARD, height=160)
+        hdr.pack(fill="x")
+        hdr.pack_propagate(False)
+        tk.Label(hdr, text="🎓", bg=CARD, fg=NAVY,
                  font=(FONT, 30)).pack(pady=(14, 0))
-        tk.Label(self, text=("إنشاء حساب المدير" if setup_mode
+        tk.Label(hdr, text=("إنشاء حساب المدير" if setup_mode
                              else "تسجيل الدخول"),
-                 bg=NAVY, fg="white", font=F_TITLE).pack()
-        tk.Label(self, text=school(), bg=NAVY, fg="white",
+                 bg=CARD, fg=TEXT, font=F_TITLE).pack()
+        tk.Label(hdr, text=school(), bg=CARD, fg=MUTED,
                  font=F_SUB, wraplength=380, justify="center").pack(
             pady=(0, 8), padx=12)
-        tk.Frame(self, bg=GOLD, height=3).pack(fill="x")
+        tk.Frame(self, bg=BORDER, height=1).pack(fill="x")
 
         body = tk.Frame(self, bg=BG, padx=28, pady=18)
         body.pack(fill="both", expand=True)
