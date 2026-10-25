@@ -4424,8 +4424,7 @@ class LoginWindow(tk.Tk):
         f.pack(fill="x", pady=5)
         _stdttk.Label(f, text=label, width=16, anchor="e").pack(side="right")
         var = tk.StringVar()
-        e = _stdttk.Entry(f, textvariable=var, show=show or "", justify="right",
-                          highlightthickness=0)
+        e = _stdttk.Entry(f, textvariable=var, show=show or "", justify="right")
         e.pack(side="right", fill="x", expand=True, padx=6)
         return var, f.winfo_children()[-1]
 
