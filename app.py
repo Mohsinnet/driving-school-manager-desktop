@@ -3092,11 +3092,11 @@ class CalendarPicker(tk.Toplevel):
                   activebackground=GOLD, activeforeground=NAVY,
                   cursor="hand2").pack(side="right", padx=2, pady=4)
         tk.Button(head, text="»", width=2, command=self._next_year,
-                  bg=NAVY, fg=GOLD, relief="flat", font=(FONT, 11, "bold"),
+                  bg=NAVY, fg="white", relief="flat", font=(FONT, 11, "bold"),
                   activebackground=GOLD, activeforeground=NAVY,
                   cursor="hand2").pack(side="left", padx=(6, 2), pady=4)
         tk.Button(head, text="«", width=2, command=self._prev_year,
-                  bg=NAVY, fg=GOLD, relief="flat", font=(FONT, 11, "bold"),
+                  bg=NAVY, fg="white", relief="flat", font=(FONT, 11, "bold"),
                   activebackground=GOLD, activeforeground=NAVY,
                   cursor="hand2").pack(side="left", pady=4)
         self.lbl_ym = tk.Label(head, text="", bg=NAVY, fg="white",
@@ -3198,7 +3198,7 @@ def dialog_header(win, title, subtitle=None):
     tk.Label(inner, text=title, bg=NAVY, fg="white",
              font=(FONT, 13, "bold")).pack(side="right")
     if subtitle:
-        tk.Label(inner, text=subtitle, bg=NAVY, fg=GOLD,
+        tk.Label(inner, text=subtitle, bg=NAVY, fg="white",
                  font=F_SUB).pack(side="left")
     tk.Frame(win, bg=GOLD, height=3).pack(fill="x")
 
@@ -3878,7 +3878,7 @@ class ExamsWindow(tk.Toplevel):
         head.pack(fill="x")
         for i in range(7):
             head.grid_columnconfigure(6 - i, weight=1)
-            tk.Label(head, text=AR_WEEKDAYS[i], bg=NAVY, fg=GOLD,
+            tk.Label(head, text=AR_WEEKDAYS[i], bg=NAVY, fg="white",
                      font=(FONT, 9, "bold"), pady=5).grid(
                 row=0, column=6 - i, sticky="nsew")
         self.cal_grid = tk.Frame(cal_card, bg=BORDER)
@@ -4396,7 +4396,7 @@ class LoginWindow(tk.Tk):
             pady=(0, 8), padx=12)
         tk.Frame(self, bg=GOLD, height=3).pack(fill="x")
 
-        body = _stdttk.Frame(self, padding=(28, 18))
+        body = tk.Frame(self, bg=BG, padx=28, pady=18)
         body.pack(fill="both", expand=True)
         self.v_user = self._field(body, "اسم المستخدم")
         self.v_pass = self._field(body, "كلمة المرور", show="•")
@@ -4405,10 +4405,10 @@ class LoginWindow(tk.Tk):
             self.v_confirm = self._field(body, "تأكيد كلمة المرور",
                                          show="•")
             self.v_role = tk.StringVar(value="admin")
-            rf = _stdttk.Frame(body)
+            rf = tk.Frame(body, bg=BG)
             rf.pack(fill="x", pady=(6, 0))
-            _stdttk.Label(rf, text="الصلاحية:", width=16,
-                      anchor="e").pack(side="right")
+            tk.Label(rf, text="الصلاحية:", width=16,
+                      anchor="e", bg=BG, fg="black", font=(FONT, 10)).pack(side="right")
             _stdttk.Combobox(rf, textvariable=self.v_role, state="readonly",
                          values=["admin", "employee"], width=14,
                          justify="center").pack(side="right", padx=6)
@@ -4437,10 +4437,14 @@ class LoginWindow(tk.Tk):
     def _field(self, parent, label, show=None):
         f = _stdttk.Frame(parent)
         f.pack(fill="x", pady=5)
-        _stdttk.Label(f, text=label, width=16, anchor="e").pack(side="right")
+        tk.Label(f, text=label, width=16, anchor="e", bg=BG, fg="black", font=(FONT, 10)).pack(side="right")
         var = tk.StringVar()
-        e = _stdttk.Entry(f, textvariable=var, show=show or "", justify="right")
-        e.pack(side="right", fill="x", expand=True, padx=6)
+        e = tk.Entry(f, textvariable=var, show=show or "", justify="right",
+                     bg=CARD, fg="black", relief="solid", bd=1,
+                     highlightthickness=1, highlightcolor=BORDER,
+                     highlightbackground=BORDER, insertbackground="black",
+                     font=(FONT, 11))
+        e.pack(side="right", fill="x", expand=True, padx=6, ipady=4)
         return var, f.winfo_children()[-1]
 
     def submit(self):
