@@ -1,0 +1,10 @@
+{
+  "school_name": "مؤسسة تعليم السياق الكتبية",
+  "currency": "درهم",
+  "backup_on_start": true,
+  "backup_on_exit": true,
+  "backup_keep": 30,
+  "exam_alert_days": 7,
+  "sidebar_open": false,
+  "theme": "light"
+}

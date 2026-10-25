@@ -1,0 +1,100 @@
+    def _build_table(self, parent):
+        # Container frame with padding
+        mid = ttk.Frame(parent, padding=(16, 10, 16, 10))
+        mid.pack(fill="both", expand=True)
+
+        # Column configuration (right-to-left)
+        self._disp_fields = list(reversed(TABLE_FIELDS))
+        cols = tuple(f[0] for f in self._disp_fields)
+        heads = {f[0]: f[1] for f in TABLE_FIELDS}
+        widths = {f[0]: f[2] for f in TABLE_FIELDS}
+        stretch = {f[0]: f[3] for f in TABLE_FIELDS}
+
+        # ----- Fixed header using Canvas -----
+        self._head_canvas = tk.Canvas(mid, bg=NAVY, height=34,
+                                       highlightthickness=0)
+        self._head_canvas.pack(side="top", fill="x")
+        self._head_items = []
+        x_cursor = 0
+        total_w = 0
+        for c in cols:
+            w = widths[c]
+            # Header background
+            self._head_canvas.create_rectangle(
+                x_cursor, 0, x_cursor + w, 34, fill=NAVY, outline="#B8C7D9")
+            # Header text (right-aligned)
+            self._head_canvas.create_text(
+                x_cursor + w - 8, 17, text=heads[c], anchor="e",
+                fill="white", font=F_TH)
+            self._head_items.append((c, x_cursor, w))
+            x_cursor += w
+            total_w += w
+        self._head_canvas.config(scrollregion=(0, 0, total_w, 34))
+
+        # ----- Treeview and scrollbars -----
+        # Frame that holds treeview + scrollbars
+        container = ttk.Frame(mid)
+        container.pack(fill="both", expand=True)
+
+        self.tree = ttk.Treeview(container, columns=cols, show="headings",
+                                 selectmode="browse")
+        self._head_texts = heads
+        for c in cols:
+            self.tree.heading(c, text=heads[c], anchor="e",
+                              command=lambda col=c: self._sort_by(col))
+            self.tree.column(c, width=widths[c], anchor="e",
+                             stretch=stretch[c])
+        # Row tags for alternating colours and status
+        self.tree.tag_configure("odd", background=ROW_ALT)
+        self.tree.tag_configure("even", background=CARD)
+        self.tree.tag_configure("debt", foreground=DANGER,
+                                font=(FONT, 10, "bold"))
+        self.tree.tag_configure("pass", background=PASS_BG)
+        self.tree.tag_configure("pass_alt", background="#D8EADD")
+        self.tree.tag_configure("fail", background=FAIL_BG)
+        self.tree.tag_configure("fail_alt", background="#F2DADA")
+        self.tree.tag_configure("hover", background=ROW_HOVER)
+        self.tree.tag_configure("hover_pass", background="#D3E6D8")
+        self.tree.tag_configure("hover_fail", background="#F0D6D6")
+        # For restoring background after hover
+        self._row_bg_tag = {}
+        self._hover_row = None
+
+        # Empty-state hint (placed over treeview area)
+        self._empty_hint = tk.Label(
+            container, text="لا يوجد مترشحون مطابقون — جرّب تغيير البحث أو الفلتر",
+            bg=CARD, fg=MUTED, font=F_BODY_B)
+        self._empty_hint.place(relx=0.5, rely=0.45, anchor="center")
+        self._empty_hint.place_forget()
+
+        # Scrollbars
+        sy = ttk.Scrollbar(container, orient="vertical",
+                           command=self.tree.yview)
+        def _sync_x(*args):
+            # Sync horizontal scroll between header canvas and treeview
+            self._head_canvas.xview(*args)
+            self.tree.xview(*args)
+        sx = ttk.Scrollbar(container, orient="horizontal",
+                           command=_sync_x)
+        self._head_canvas.configure(xscrollcommand=_sync_x)
+        self.tree.configure(yscrollcommand=sy.set, xscrollcommand=_sync_x)
+
+        # Layout: treeview fills, scrollbars on edges
+        self.tree.pack(side="top", fill="both", expand=True)
+        sy.pack(side="right", fill="y")
+        sx.pack(side="bottom", fill="x")
+
+        # Event bindings
+        self.tree.bind("<Double-1>", lambda e: self.on_edit())
+        self.tree.bind("<Button-3>", self._show_context)
+        self.tree.bind("<<TreeviewSelect>>",
+                       lambda e: self._update_nav_state(), add="+")
+        self.tree.bind("<Motion>", self._on_tree_hover, add="+")
+        self.tree.bind("<Leave>", self._on_tree_leave, add="+")
+
+        # Context menu
+        self._build_context_menu()
+
+        # Initial state
+        self._sort_col = None
+        self._sort_desc = False

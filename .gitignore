@@ -1,0 +1,35 @@
+﻿# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Build artifacts
+build/
+dist/
+*.spec
+
+# Sensitive data
+auth.json
+*.db
+*.db.enc
+*.db-wal
+*.db-shm
+
+# Backups & exports (user data)
+backups/
+exports/
+
+# Executables
+*.exe
+
+# Temp / smoke artifacts
+_MEI*/
+*.log
+
+# Temp artifacts
+.freebuff/
+*.png
+*.txt
+!README.txt
+!new_build_table.txt
+
