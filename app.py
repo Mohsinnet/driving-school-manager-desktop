@@ -1665,7 +1665,7 @@ class App(tk.Tk):
         tk.Label(app_info, text=APP_TITLE, bg=NAVY, fg="white",
                  font=F_TITLE, anchor="e").pack(anchor="e")
         tk.Label(app_info, text=school(), bg=NAVY, fg="white",
-                 font=(FONT, 9), anchor="e").pack(anchor="e")
+                 font=F_SUB, anchor="e").pack(anchor="e")
 
         # المستخدم الحالي وصلاحيته (يسار وسط)
         who = "%s  \u2022  %s" % (self.username or "\u2014",
@@ -4376,9 +4376,10 @@ class LoginWindow(tk.Tk):
             _ls.theme_use("clam")
             _ls.configure("TEntry", fieldbackground=CARD, foreground="black",
                           bordercolor=BORDER, lightcolor=BORDER, darkcolor=BORDER,
-                          insertcolor="black", padding=6)
+                          focuscolor=BORDER, insertcolor="black", padding=6)
             _ls.map("TEntry", bordercolor=[("focus", BORDER)],
-                    lightcolor=[("focus", BORDER)], darkcolor=[("focus", BORDER)])
+                    lightcolor=[("focus", BORDER)], darkcolor=[("focus", BORDER)],
+                    focuscolor=[("focus", BORDER)])
             _ls.configure("TLabel", background=BG, foreground="black")
             _ls.configure("TButton", foreground="black")
         except Exception:
@@ -4390,7 +4391,7 @@ class LoginWindow(tk.Tk):
         tk.Label(self, text=("إنشاء حساب المدير" if setup_mode
                              else "تسجيل الدخول"),
                  bg=NAVY, fg="white", font=F_TITLE).pack()
-        tk.Label(self, text=school(), bg=NAVY, fg=GOLD,
+        tk.Label(self, text=school(), bg=NAVY, fg="white",
                  font=F_SUB, wraplength=380, justify="center").pack(
             pady=(0, 8), padx=12)
         tk.Frame(self, bg=GOLD, height=3).pack(fill="x")
