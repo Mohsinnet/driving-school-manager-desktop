@@ -1664,7 +1664,7 @@ class App(tk.Tk):
         app_info.pack(side="right")
         tk.Label(app_info, text=APP_TITLE, bg=NAVY, fg="white",
                  font=F_TITLE, anchor="e").pack(anchor="e")
-        tk.Label(app_info, text=school(), bg=NAVY, fg=GOLD,
+        tk.Label(app_info, text=school(), bg=NAVY, fg="white",
                  font=(FONT, 9), anchor="e").pack(anchor="e")
 
         # المستخدم الحالي وصلاحيته (يسار وسط)
@@ -4370,6 +4370,20 @@ class LoginWindow(tk.Tk):
         self.resizable(True, True)
         self.minsize(440, 360)
 
+        # إزالة التضليل الأزرق (focus border) على حقول الإدخال
+        try:
+            _ls = _stdttk.Style(self)
+            _ls.theme_use("clam")
+            _ls.configure("TEntry", fieldbackground=CARD, foreground="black",
+                          bordercolor=BORDER, lightcolor=BORDER, darkcolor=BORDER,
+                          insertcolor="black", padding=6)
+            _ls.map("TEntry", bordercolor=[("focus", BORDER)],
+                    lightcolor=[("focus", BORDER)], darkcolor=[("focus", BORDER)])
+            _ls.configure("TLabel", background=BG, foreground="black")
+            _ls.configure("TButton", foreground="black")
+        except Exception:
+            pass
+
         tk.Frame(self, bg=NAVY, height=100).pack(fill="x")
         tk.Label(self, text="🎓", bg=NAVY, fg=GOLD,
                  font=(FONT, 30)).pack(pady=(14, 0))
@@ -4398,7 +4412,7 @@ class LoginWindow(tk.Tk):
                          values=["admin", "employee"], width=14,
                          justify="center").pack(side="right", padx=6)
             _stdttk.Label(rf, text="(admin=مدير / employee=موظف)",
-                      foreground=MUTED).pack(side="right", padx=4)
+                      foreground="black").pack(side="right", padx=4)
 
         self.bind("<Return>", lambda e: self.submit())
         _stdttk.Button(body, text="دخول" if not setup_mode else "إنشاء الحساب",
