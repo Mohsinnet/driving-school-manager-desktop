@@ -176,19 +176,19 @@ F_MONO = ("Consolas", 10)
 F_LARGE_TITLE = (FONT, 28, "bold")
 
 # ---------------- القائمة الجانبية (macOS style) ----------------
-NAV_SECTION = "#8E8E93"     # رمادي Apple للعناوين
-NAV_TEXT = "#1D1D1F"        # نص داكن
-NAV_ICON = "#8E8E93"
-NAV_DISABLED = "#C7C7CC"
-NAV_LINE = "#D2D2D7"
-NAV_BADGE = "#007AFF"
-NAV_CHIP = "#E5E5EA"        # خلفية شريحة الأيقونة (رمادي Apple)
-NAV_CHIP_HOVER = "#D1D1D6"
-NAV_SHADOW = "#D2D2D7"      # ظل خفيف
+NAV_SECTION = "#B8C7D9"
+NAV_TEXT = "#FFFFFF"
+NAV_ICON = "#DDE6F0"
+NAV_DISABLED = "#8E9AAF"
+NAV_LINE = "#3A6FA0"
+NAV_BADGE = "#FF9500"
+NAV_CHIP = "#1A5FA0"
+NAV_CHIP_HOVER = "#2A70B0"
+NAV_SHADOW = "#0051D5"
 CARD_BORDER = "#D2D2D7"
 CARD_HOVER_BG = "#F2F2F7"
 CARD_HOVER_BORDER = "#007AFF"
-SIDEBAR_BG = "#F2F2F7"     # خلفية الشريط الجانبي (macOS light)
+SIDEBAR_BG = "#007AFF"
 SIDEBAR_W = 276
 
 _ICON_FAMILY = None
@@ -1477,9 +1477,9 @@ def setup_style(root):
     style.configure("TLabel", background=BG, foreground=TEXT)
     style.configure("TEntry", fieldbackground=CARD, foreground=TEXT,
                     bordercolor=BORDER, lightcolor=BORDER, darkcolor=BORDER,
-                    insertcolor=NAVY, padding=6)
-    style.map("TEntry", bordercolor=[("focus", NAVY)],
-              lightcolor=[("focus", NAVY)], darkcolor=[("focus", NAVY)])
+                    insertcolor=NAVY, padding=6, relief="flat")
+    style.map("TEntry", bordercolor=[("focus", BORDER)],
+              lightcolor=[("focus", BORDER)], darkcolor=[("focus", BORDER)])
     style.configure("TCombobox", padding=5, fieldbackground=CARD,
                     bordercolor=BORDER, arrowcolor=NAVY)
     style.map("TCombobox", fieldbackground=[("readonly", CARD)])
@@ -1641,14 +1641,14 @@ class App(tk.Tk):
         inner = tk.Frame(header, bg=NAVY)
         inner.pack(fill="both", expand=True, padx=16, pady=6)
 
-        # زر القائمة (يسار الواجهة في RTL)
+        # زر القائمة (يمين الواجهة في RTL)
         self.hamburger = tk.Button(
             inner, text=icon_text("menu"), command=self._toggle_sidebar,
             bg=NAVY, fg="white", activebackground=NAVY_HOVER,
             activeforeground=GOLD, relief="flat", bd=0,
             highlightthickness=0, font=icon_font(20), cursor="hand2",
             padx=8, pady=0, takefocus=True)
-        self.hamburger.pack(side="left")
+        self.hamburger.pack(side="right")
 
         # منطقة الوسط: شعار + اسم التطبيق
         center = tk.Frame(inner, bg=NAVY)
@@ -1670,16 +1670,14 @@ class App(tk.Tk):
         # المستخدم الحالي وصلاحيته (يسار وسط)
         who = "%s  \u2022  %s" % (self.username or "\u2014",
                              ROLE_LABELS.get(self.role, self.role))
-        user_pill = tk.Frame(inner, bg="#E8E8ED")
-        user_pill.pack(side="left", padx=(12, 0), pady=2)
-        tk.Label(user_pill, text=" %s " % who, bg="#E8E8ED", fg=TEXT,
-                 font=(FONT, 9)).pack(side="left")
+        tk.Label(inner, text=who, bg=NAVY, fg="white",
+                 font=(FONT, 10)).pack(side="left", padx=(12, 0))
 
         # زر تبديل الوضع (فاتح/داكن) - Apple style
         self.theme_btn = tk.Button(
             inner, text=("🌙" if not is_dark() else "☀️"),
             command=self.toggle_theme,
-            bg=BG, fg=TEXT, activebackground=ROW_HOVER,
+            bg=NAVY, fg="white", activebackground=NAVY_HOVER,
             relief="flat", bd=0, highlightthickness=0,
             font=(FONT, 14), cursor="hand2", padx=6, pady=0)
         self.theme_btn.pack(side="left", padx=(6, 0))
@@ -4426,8 +4424,9 @@ class LoginWindow(tk.Tk):
         f.pack(fill="x", pady=5)
         _stdttk.Label(f, text=label, width=16, anchor="e").pack(side="right")
         var = tk.StringVar()
-        _stdttk.Entry(f, textvariable=var, show=show or "", justify="right"
-                  ).pack(side="right", fill="x", expand=True, padx=6)
+        e = _stdttk.Entry(f, textvariable=var, show=show or "", justify="right",
+                          highlightthickness=0)
+        e.pack(side="right", fill="x", expand=True, padx=6)
         return var, f.winfo_children()[-1]
 
     def submit(self):
