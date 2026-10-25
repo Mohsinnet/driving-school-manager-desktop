@@ -37,7 +37,7 @@ python -m pip install cryptography
 echo.
 echo Building... this may take about a minute.
 echo.
-python -m PyInstaller --noconfirm --onefile --windowed --name DrivingSchoolManager --icon icon.ico --add-data "icon.ico;." --hidden-import openpyxl --hidden-import et_xmlfile --hidden-import PIL --hidden-import PIL.Image --hidden-import cryptography app.py
+python -m PyInstaller --noconfirm --onefile --windowed --name DrivingSchoolManager --icon icon.ico --add-data "icon.ico;." --hidden-import openpyxl --hidden-import et_xmlfile --hidden-import PIL --hidden-import PIL.Image --hidden-import cryptography --collect-all ttkbootstrap app.py
 if errorlevel 1 goto fail
 
 copy /Y "dist\DrivingSchoolManager.exe" "DrivingSchoolManager.exe" >nul

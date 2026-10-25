@@ -65,52 +65,130 @@ DB_COLS = [
     "paid3", "paid_extra", "notes", "photo_path",
 ]
 
-# ---------------- الهوية البصرية ----------------
+# ---------------- الهوية البصرية (Apple-inspired) ----------------
+# خط: Segoe UI (Windows) قريب من SF؛ للعربية Tajawal/IBM Plex Sans Arabic إن توفر
 FONT = "Segoe UI"
-NAVY = "#0B2E4A"
-NAVY_DARK = "#082238"
-NAVY_HOVER = "#123F63"
-GOLD = "#C4A35A"
-GOLD_DARK = "#AF8F45"
-BG = "#F4F6F9"
+FONT_AR = "Segoe UI"   # fallback؛ يمكن تغييره إلى "Tajawal" إن ثُبّت
+# ألوان Apple (Light)
+NAVY = "#007AFF"          # أزرق Apple أساسي
+NAVY_DARK = "#0051D5"
+NAVY_HOVER = "#0066E0"
+GOLD = "#FF9500"          # برتقالي Apple (تنبيه/تمييز)
+GOLD_DARK = "#E08600"
+BG = "#F5F5F7"            # خلفية Apple رمادية ناعمة
 CARD = "#FFFFFF"
-BORDER = "#DCE3EC"
-ROW_ALT = "#F7F9FC"
-ROW_HOVER = "#EAF0F6"
-PASS_BG = "#E3F0E7"     # خلفية صف الناجح
-FAIL_BG = "#F9E6E6"     # خلفية صف الراسب
-TEXT = "#1F2933"
-MUTED = "#64748B"
-OK = "#2E7D5B"
-DANGER = "#B23A3A"
-WARN = "#B08900"
-STATUS_BG = "#E3E9F0"
-STATUS_FG = NAVY
+BORDER = "#D2D2D7"
+ROW_ALT = "#F5F5F7"
+ROW_HOVER = "#E8E8ED"
+PASS_BG = "#E3F5E8"
+FAIL_BG = "#FDECEA"
+TEXT = "#1D1D1F"
+MUTED = "#86868B"
+OK = "#34C759"
+DANGER = "#FF3B30"
+WARN = "#FF9500"
+STATUS_BG = "#E8E8ED"
+STATUS_FG = "#1D1D1F"
 
-F_BODY = (FONT, 10)
+# ألوان Apple (Dark)
+DARK_BG = "#1C1C1E"
+DARK_CARD = "#2C2C2E"
+DARK_BORDER = "#3A3A3C"
+DARK_TEXT = "#F5F5F7"
+DARK_MUTED = "#98989D"
+DARK_NAVY = "#0A84FF"
+DARK_GOLD = "#FF9F0A"
+
+def apply_theme_constants(mode):
+    """إعادة تعيين ثوابت الألوان حسب الوضع (فاتح/داكن)."""
+    global THEME_MODE, NAVY, NAVY_DARK, NAVY_HOVER, GOLD, GOLD_DARK
+    global BG, CARD, BORDER, ROW_ALT, ROW_HOVER, TEXT, MUTED
+    global OK, DANGER, WARN, STATUS_BG, STATUS_FG
+    THEME_MODE = mode
+    if mode == "dark":
+        NAVY = DARK_NAVY
+        NAVY_DARK = "#0040A0"
+        NAVY_HOVER = "#0A7AE0"
+        GOLD = DARK_GOLD
+        GOLD_DARK = "#E08600"
+        BG = DARK_BG
+        CARD = DARK_CARD
+        BORDER = DARK_BORDER
+        ROW_ALT = "#2C2C2E"
+        ROW_HOVER = "#3A3A3C"
+        TEXT = DARK_TEXT
+        MUTED = DARK_MUTED
+        OK = "#30D158"
+        DANGER = "#FF453A"
+        WARN = DARK_GOLD
+        STATUS_BG = "#2C2C2E"
+        STATUS_FG = DARK_TEXT
+    else:
+        NAVY = "#007AFF"
+        NAVY_DARK = "#0051D5"
+        NAVY_HOVER = "#0066E0"
+        GOLD = "#FF9500"
+        GOLD_DARK = "#E08600"
+        BG = "#F5F5F7"
+        CARD = "#FFFFFF"
+        BORDER = "#D2D2D7"
+        ROW_ALT = "#F5F5F7"
+        ROW_HOVER = "#E8E8ED"
+        TEXT = "#1D1D1F"
+        MUTED = "#86868B"
+        OK = "#34C759"
+        DANGER = "#FF3B30"
+        WARN = "#FF9500"
+        STATUS_BG = "#E8E8ED"
+        STATUS_FG = "#1D1D1F"
+
+def is_dark():
+    return THEME_MODE == "dark"
+
+def C(key):
+    """إرجاع لون حسب الثيم الحالي."""
+    dark = {
+        "bg": DARK_BG, "card": DARK_CARD, "border": DARK_BORDER,
+        "text": DARK_TEXT, "muted": DARK_MUTED, "primary": DARK_NAVY,
+        "accent": DARK_GOLD, "ok": OK, "danger": DANGER, "warn": DARK_GOLD,
+        "status_bg": "#2C2C2E", "status_fg": DARK_TEXT,
+        "row_alt": "#2C2C2E", "row_hover": "#3A3A3C",
+    }
+    light = {
+        "bg": BG, "card": CARD, "border": BORDER,
+        "text": TEXT, "muted": MUTED, "primary": NAVY,
+        "accent": GOLD, "ok": OK, "danger": DANGER, "warn": WARN,
+        "status_bg": STATUS_BG, "status_fg": STATUS_FG,
+        "row_alt": ROW_ALT, "row_hover": ROW_HOVER,
+    }
+    return (dark if is_dark() else light).get(key, BG)
+
+F_BODY = (FONT, 11)
 F_SMALL = (FONT, 9)
-F_BODY_B = (FONT, 10, "bold")
-F_HEAD = (FONT, 10, "bold")
-F_TITLE = (FONT, 20, "bold")
-F_SUB = (FONT, 10)
-F_CARD_NUM = (FONT, 24, "bold")
-F_CARD_T = (FONT, 9)
-F_TH = (FONT, 10, "bold")
+F_BODY_B = (FONT, 11, "bold")
+F_HEAD = (FONT, 12, "bold")
+F_TITLE = (FONT, 22, "bold")
+F_SUB = (FONT, 11)
+F_CARD_NUM = (FONT, 28, "bold")
+F_CARD_T = (FONT, 10)
+F_TH = (FONT, 11, "bold")
 F_MONO = ("Consolas", 10)
+F_LARGE_TITLE = (FONT, 28, "bold")
 
-# ---------------- القائمة الجانبية ----------------
-NAV_SECTION = "#7F95AB"
-NAV_TEXT = "#DDE6F0"
-NAV_ICON = "#9FB3C8"
-NAV_DISABLED = "#5C7185"
-NAV_LINE = "#1B4368"
-NAV_BADGE = GOLD
-NAV_CHIP = "#12395C"        # خلفية شريحة الأيقونة (خماد)
-NAV_CHIP_HOVER = "#1B5280"  # شريحة الأيقونة عند المرور
-NAV_SHADOW = "#04121F"      # ظل الحافة الملاصقة للمحتوى
-CARD_BORDER = "#D4DCE6"     # حدود بطاقة عادية
-CARD_HOVER_BG = "#F7FAFD"   # خلفية البطاقة عند التمرير
-CARD_HOVER_BORDER = GOLD    # حدود البطاقة عند التمرير (ذهبي)
+# ---------------- القائمة الجانبية (macOS style) ----------------
+NAV_SECTION = "#8E8E93"     # رمادي Apple للعناوين
+NAV_TEXT = "#1D1D1F"        # نص داكن
+NAV_ICON = "#8E8E93"
+NAV_DISABLED = "#C7C7CC"
+NAV_LINE = "#D2D2D7"
+NAV_BADGE = "#007AFF"
+NAV_CHIP = "#E5E5EA"        # خلفية شريحة الأيقونة (رمادي Apple)
+NAV_CHIP_HOVER = "#D1D1D6"
+NAV_SHADOW = "#D2D2D7"      # ظل خفيف
+CARD_BORDER = "#D2D2D7"
+CARD_HOVER_BG = "#F2F2F7"
+CARD_HOVER_BORDER = "#007AFF"
+SIDEBAR_BG = "#F2F2F7"     # خلفية الشريط الجانبي (macOS light)
 SIDEBAR_W = 276
 
 _ICON_FAMILY = None
@@ -326,6 +404,7 @@ SETTINGS_DEFAULTS = {
     "backup_keep": 30,
     "exam_alert_days": 7,
     "sidebar_open": False,
+    "theme": "light",
 }
 
 
@@ -352,6 +431,9 @@ def save_settings(s):
 
 
 SETTINGS = load_settings()
+
+# تطبيق الثيم المحفوظ
+THEME_MODE = SETTINGS.get("theme", "light")
 
 
 def school():
@@ -1505,6 +1587,28 @@ class App(tk.Tk):
         self.protocol("WM_DELETE_WINDOW", self._on_close)
         audit("تسجيل دخول", "%s (%s)" % (username, ROLE_LABELS.get(role, role)))
 
+    def toggle_theme(self):
+        """تبديل الوضع (فاتح/داكن) وإعادة بناء الواجهة."""
+        global THEME_MODE
+        new_mode = "dark" if THEME_MODE == "light" else "light"
+        apply_theme_constants(new_mode)
+        try:
+            SETTINGS["theme"] = THEME_MODE
+            save_settings(SETTINGS)
+        except Exception:
+            pass
+        # إعادة بناء الواجهة
+        try:
+            for w in self.winfo_children():
+                w.destroy()
+        except Exception:
+            pass
+        self.configure(bg=C("bg"))
+        setup_style(self)
+        self._build()
+        self.refresh()
+        self._bind_keys()
+
     def on_logout(self):
         """تسجيل الخروج ثم العودة إلى شاشة الدخول."""
         self.logout_requested = True
@@ -1566,12 +1670,21 @@ class App(tk.Tk):
         # المستخدم الحالي وصلاحيته (يسار وسط)
         who = "%s  \u2022  %s" % (self.username or "\u2014",
                              ROLE_LABELS.get(self.role, self.role))
-        user_pill = tk.Frame(inner, bg="#123F63")
+        user_pill = tk.Frame(inner, bg="#E8E8ED")
         user_pill.pack(side="left", padx=(12, 0), pady=2)
-        tk.Label(user_pill, text=" %s " % who, bg="#123F63", fg="#B8C7D9",
+        tk.Label(user_pill, text=" %s " % who, bg="#E8E8ED", fg=TEXT,
                  font=(FONT, 9)).pack(side="left")
 
-        tk.Frame(self, bg=GOLD, height=3).pack(fill="x")
+        # زر تبديل الوضع (فاتح/داكن) - Apple style
+        self.theme_btn = tk.Button(
+            inner, text=("🌙" if not is_dark() else "☀️"),
+            command=self.toggle_theme,
+            bg=BG, fg=TEXT, activebackground=ROW_HOVER,
+            relief="flat", bd=0, highlightthickness=0,
+            font=(FONT, 14), cursor="hand2", padx=6, pady=0)
+        self.theme_btn.pack(side="left", padx=(6, 0))
+
+        tk.Frame(self, bg=BORDER, height=1).pack(fill="x")
 
     # ---------- القائمة المنسدلة ----------
     def _build_sidebar(self, parent):
